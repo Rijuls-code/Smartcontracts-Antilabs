@@ -1,0 +1,49 @@
+{
+	"compiler": {
+		"version": "0.8.34+commit.80d5c536"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"author": "Senior Solidity Architect",
+			"details": "Pure type definitions only: no storage, no functions, no external      calls. Imported by every contract so all modules agree on layout.",
+			"kind": "dev",
+			"methods": {},
+			"title": "InsuranceTypes",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"notice": "Minimal, shared struct definitions for the Driver Insurance         protocol. Only the fields strictly required for trustless         on-chain insurance logic live here — everything else (trip         history, AI inputs, documents, telemetry, driver profiles) is         intentionally kept off-chain in the backend, per project scope.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/libraries/InsuranceTypes.sol": "InsuranceTypes"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/libraries/InsuranceTypes.sol": {
+			"keccak256": "0x6ca8b2f4ac3af019f94999c581b02a8e4c4cfc63fa9f18d8deb3c71b817197b8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fef363ba8a57b1a588309f68c7df03b97e3ce9262991ade38ee77a5ba1652d2f",
+				"dweb:/ipfs/QmfDH9tW8npBUUmq2Jt2gz1t5MPjPsXYZd7oFiH2RLxUnU"
+			]
+		}
+	},
+	"version": 1
+}

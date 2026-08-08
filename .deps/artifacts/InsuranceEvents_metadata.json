@@ -1,0 +1,460 @@
+{
+	"compiler": {
+		"version": "0.8.34+commit.80d5c536"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "claimId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "approvedBy",
+						"type": "address"
+					}
+				],
+				"name": "ClaimApproved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "claimId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "reason",
+						"type": "string"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "rejectedBy",
+						"type": "address"
+					}
+				],
+				"name": "ClaimRejected",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "claimId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "policyId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "ClaimSubmitted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "wallet",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "driverId",
+						"type": "bytes32"
+					}
+				],
+				"name": "DriverRegistered",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "pausedBy",
+						"type": "address"
+					}
+				],
+				"name": "EmergencyPaused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "unpausedBy",
+						"type": "address"
+					}
+				],
+				"name": "EmergencyUnpaused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "depositor",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "FundsDeposited",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "claimId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "driver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "PayoutCompleted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "policyId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "cancelledBy",
+						"type": "address"
+					}
+				],
+				"name": "PolicyCancelled",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "policyId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "driver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "premium",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "coverage",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint64",
+						"name": "expiryTime",
+						"type": "uint64"
+					}
+				],
+				"name": "PolicyPurchased",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "policyId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newPremium",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint64",
+						"name": "newExpiryTime",
+						"type": "uint64"
+					}
+				],
+				"name": "PolicyRenewed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "policyId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "oldPremium",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newPremium",
+						"type": "uint256"
+					}
+				],
+				"name": "PremiumUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "driver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint8",
+						"name": "newScore",
+						"type": "uint8"
+					}
+				],
+				"name": "SafetyScoreUpdated",
+				"type": "event"
+			}
+		],
+		"devdoc": {
+			"author": "Senior Solidity Architect",
+			"details": "Events declared inside a library can be emitted directly by any      contract that imports it, via `InsuranceEvents.EventName(...)` — one      canonical definition instead of duplicating identical events across      DriverRegistry, InsurancePolicy, ClaimManager, and InsurancePool.",
+			"events": {
+				"ClaimApproved(uint256,address)": {
+					"params": {
+						"approvedBy": "The insurance-company address that approved it.",
+						"claimId": "The approved claim ID."
+					}
+				},
+				"ClaimRejected(uint256,string,address)": {
+					"params": {
+						"claimId": "The rejected claim ID.",
+						"reason": "A short human-readable reason.",
+						"rejectedBy": "The address that rejected the claim."
+					}
+				},
+				"ClaimSubmitted(uint256,uint256,uint256)": {
+					"params": {
+						"amount": "The amount requested, in wei.",
+						"claimId": "The newly created claim ID.",
+						"policyId": "The policy the claim is filed against."
+					}
+				},
+				"DriverRegistered(address,bytes32)": {
+					"params": {
+						"driverId": "The off-chain-assigned driver identifier.",
+						"wallet": "The driver's wallet address."
+					}
+				},
+				"EmergencyPaused(address)": {
+					"params": {
+						"pausedBy": "The address that triggered the pause."
+					}
+				},
+				"EmergencyUnpaused(address)": {
+					"params": {
+						"unpausedBy": "The address that lifted the pause."
+					}
+				},
+				"FundsDeposited(address,uint256)": {
+					"params": {
+						"amount": "The amount deposited, in wei.",
+						"depositor": "The address that deposited funds."
+					}
+				},
+				"PayoutCompleted(uint256,address,uint256)": {
+					"params": {
+						"amount": "The amount paid out, in wei.",
+						"claimId": "The paid claim ID.",
+						"driver": "The recipient driver wallet."
+					}
+				},
+				"PolicyCancelled(uint256,address)": {
+					"params": {
+						"cancelledBy": "The address that initiated the cancellation.",
+						"policyId": "The cancelled policy ID."
+					}
+				},
+				"PolicyPurchased(uint256,address,uint256,uint256,uint64)": {
+					"params": {
+						"coverage": "The maximum payout coverage, in wei.",
+						"driver": "The driver the policy belongs to.",
+						"expiryTime": "The unix timestamp the policy expires.",
+						"policyId": "The newly created policy ID.",
+						"premium": "The premium paid, in wei."
+					}
+				},
+				"PolicyRenewed(uint256,uint256,uint64)": {
+					"params": {
+						"newExpiryTime": "The new expiry timestamp.",
+						"newPremium": "The updated premium, in wei.",
+						"policyId": "The renewed policy ID."
+					}
+				},
+				"PremiumUpdated(uint256,uint256,uint256)": {
+					"params": {
+						"newPremium": "The new premium, in wei.",
+						"oldPremium": "The previous premium, in wei.",
+						"policyId": "The affected policy ID."
+					}
+				},
+				"SafetyScoreUpdated(address,uint8)": {
+					"params": {
+						"driver": "The driver wallet whose score was updated.",
+						"newScore": "The new safety score (0-100)."
+					}
+				}
+			},
+			"kind": "dev",
+			"methods": {},
+			"title": "InsuranceEvents",
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"ClaimApproved(uint256,address)": {
+					"notice": "Emitted when the insurance company approves a claim for payout."
+				},
+				"ClaimRejected(uint256,string,address)": {
+					"notice": "Emitted when a claim is rejected."
+				},
+				"ClaimSubmitted(uint256,uint256,uint256)": {
+					"notice": "Emitted when a driver submits a new claim."
+				},
+				"DriverRegistered(address,bytes32)": {
+					"notice": "Emitted when a new driver registers with the platform."
+				},
+				"EmergencyPaused(address)": {
+					"notice": "Emitted when a contract is paused in response to an emergency."
+				},
+				"EmergencyUnpaused(address)": {
+					"notice": "Emitted when a contract is unpaused, resuming normal operations."
+				},
+				"FundsDeposited(address,uint256)": {
+					"notice": "Emitted when funds are deposited into the InsurancePool."
+				},
+				"PayoutCompleted(uint256,address,uint256)": {
+					"notice": "Emitted when a claim payout has been successfully transferred to the driver."
+				},
+				"PolicyCancelled(uint256,address)": {
+					"notice": "Emitted when a policy is cancelled by the driver or the insurer."
+				},
+				"PolicyPurchased(uint256,address,uint256,uint256,uint64)": {
+					"notice": "Emitted when a driver purchases a new insurance policy."
+				},
+				"PolicyRenewed(uint256,uint256,uint64)": {
+					"notice": "Emitted when a policy is renewed."
+				},
+				"PremiumUpdated(uint256,uint256,uint256)": {
+					"notice": "Emitted whenever a policy's premium amount is recalculated or updated."
+				},
+				"SafetyScoreUpdated(address,uint8)": {
+					"notice": "Emitted when the oracle submits an updated safety score for a driver."
+				}
+			},
+			"kind": "user",
+			"methods": {},
+			"notice": "Centralized event definitions for the lean Driver Insurance protocol.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/libraries/InsuranceEvents.sol": "InsuranceEvents"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/libraries/InsuranceEvents.sol": {
+			"keccak256": "0x849ac9f76fdacbb9e6124ecb517636035d084afce7e0c5e1a96839e2f1b8e65d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://30a20c9196d4242235d4d074a3216907bcdc1ff09e478da56def317ce185782b",
+				"dweb:/ipfs/QmZMkV9iD6xJXh91JNYxFPepgGfgANLrJtM5ggcdrN3v76"
+			]
+		}
+	},
+	"version": 1
+}

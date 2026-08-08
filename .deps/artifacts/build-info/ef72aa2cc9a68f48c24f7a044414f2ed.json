@@ -1,0 +1,1228 @@
+{
+	"id": "ef72aa2cc9a68f48c24f7a044414f2ed",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.34",
+	"solcLongVersion": "0.8.34+commit.80d5c536",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"/contracts/InsuranceErrors.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.30;\n\n/**\n * @title InsuranceErrors\n * @author Senior Solidity Architect\n * @notice Centralized, file-level custom errors shared across the lean\n *         Driver Insurance protocol contracts.\n * @dev Declared at file scope (not inside a library/contract) so any\n *      contract can `import` this file and `revert ErrorName(...)` directly.\n *      Custom errors are cheaper than `require(cond, \"string\")` — a 4-byte\n *      selector + ABI-encoded args instead of a string in bytecode/returndata.\n */\n\n// ---------------------------------------------------------------------\n//                      ACCESS CONTROL / GENERAL\n// ---------------------------------------------------------------------\n\n/// @notice Thrown when a zero address is passed where a non-zero address is required.\nerror ZeroAddress();\n\n/// @notice Thrown when a numeric argument is zero but must be non-zero.\nerror ZeroAmount();\n\n// ---------------------------------------------------------------------\n//                          DRIVER REGISTRY\n// ---------------------------------------------------------------------\n\n/// @notice Thrown when trying to register a wallet that is already registered.\n/// @param wallet The wallet address already on record.\nerror DriverAlreadyRegistered(address wallet);\n\n/// @notice Thrown when referencing a wallet that has not registered as a driver.\n/// @param wallet The unrecognized wallet address.\nerror DriverNotRegistered(address wallet);\n\n// ---------------------------------------------------------------------\n//                          INSURANCE POLICY\n// ---------------------------------------------------------------------\n\n/// @notice Thrown when a driver already holds an active policy and tries to purchase another.\n/// @param driver The driver wallet with an existing active policy.\nerror PolicyAlreadyActive(address driver);\n\n/// @notice Thrown when referencing a policy ID that does not exist.\n/// @param policyId The unrecognized policy ID.\nerror PolicyNotFound(uint256 policyId);\n\n/// @notice Thrown when an action requires an active policy but the policy is not active.\n/// @param policyId The policy ID in question.\nerror PolicyNotActive(uint256 policyId);\n\n/// @notice Thrown when an action is attempted on a policy that has expired.\n/// @param policyId The expired policy ID.\n/// @param expiryTime The timestamp at which the policy expired.\nerror PolicyExpired(uint256 policyId, uint64 expiryTime);\n\n/// @notice Thrown when the value sent does not match the required premium amount.\n/// @param required The expected premium amount in wei.\n/// @param sent The amount actually sent in wei.\nerror IncorrectPremiumAmount(uint256 required, uint256 sent);\n\n/// @notice Thrown when a caller other than the policy's driver attempts a driver-only action.\n/// @param caller The address that attempted the action.\n/// @param policyId The policy ID they attempted to act on.\nerror NotPolicyOwner(address caller, uint256 policyId);\n\n/// @notice Thrown when a policy is flagged under review (safety score < 60) and the\n///         attempted action requires the policy to be in good standing.\n/// @param policyId The policy ID under review.\nerror PolicyUnderReview(uint256 policyId);\n\n// ---------------------------------------------------------------------\n//                        SAFETY SCORE ORACLE\n// ---------------------------------------------------------------------\n\n/// @notice Thrown when a submitted safety score is outside the valid 0-100 range.\n/// @param score The invalid score that was submitted.\nerror InvalidSafetyScore(uint8 score);\n\n// ---------------------------------------------------------------------\n//                           CLAIM MANAGER\n// ---------------------------------------------------------------------\n\n/// @notice Thrown when referencing a claim ID that does not exist.\n/// @param claimId The unrecognized claim ID.\nerror ClaimNotFound(uint256 claimId);\n\n/// @notice Thrown when a driver attempts to submit a new claim while a prior\n///         claim on the same policy is still pending resolution.\n/// @param policyId The policy ID with a pending claim.\n/// @param pendingClaimId The claim ID that is still pending.\nerror ClaimAlreadyPending(uint256 policyId, uint256 pendingClaimId);\n\n/// @notice Thrown when attempting to verify an accident for a claim that was\n///         already verified, or approve/pay a claim not yet in the required state.\n/// @param claimId The claim ID.\nerror InvalidClaimState(uint256 claimId);\n\n/// @notice Thrown when attempting to approve or pay out a claim whose accident\n///         has not yet been verified by the oracle.\n/// @param claimId The claim ID.\nerror AccidentNotVerified(uint256 claimId);\n\n/// @notice Thrown when attempting to pay out a claim that has already been paid.\n/// @param claimId The claim ID already paid.\nerror DuplicatePayout(uint256 claimId);\n\n/// @notice Thrown when a claim's requested amount exceeds the policy's coverage amount.\n/// @param requested The requested claim amount.\n/// @param coverage The policy's maximum coverage amount.\nerror ClaimExceedsCoverage(uint256 requested, uint256 coverage);\n\n// ---------------------------------------------------------------------\n//                          INSURANCE POOL\n// ---------------------------------------------------------------------\n\n/// @notice Thrown when the pool's available balance is insufficient to cover a payout.\n/// @param requested The requested payout amount.\n/// @param available The pool's current available balance.\nerror InsufficientPoolBalance(uint256 requested, uint256 available);\n\n/// @notice Thrown when a native-token transfer (ETH) fails.\n/// @param to The intended recipient.\n/// @param amount The amount that failed to transfer.\nerror TransferFailed(address to, uint256 amount);\n"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": false,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			},
+			"remappings": []
+		}
+	},
+	"output": {
+		"sources": {
+			"/contracts/InsuranceErrors.sol": {
+				"ast": {
+					"absolutePath": "/contracts/InsuranceErrors.sol",
+					"exportedSymbols": {
+						"AccidentNotVerified": [
+							85
+						],
+						"ClaimAlreadyPending": [
+							75
+						],
+						"ClaimExceedsCoverage": [
+							97
+						],
+						"ClaimNotFound": [
+							68
+						],
+						"DriverAlreadyRegistered": [
+							12
+						],
+						"DriverNotRegistered": [
+							17
+						],
+						"DuplicatePayout": [
+							90
+						],
+						"IncorrectPremiumAmount": [
+							46
+						],
+						"InsufficientPoolBalance": [
+							104
+						],
+						"InvalidClaimState": [
+							80
+						],
+						"InvalidSafetyScore": [
+							63
+						],
+						"NotPolicyOwner": [
+							53
+						],
+						"PolicyAlreadyActive": [
+							22
+						],
+						"PolicyExpired": [
+							39
+						],
+						"PolicyNotActive": [
+							32
+						],
+						"PolicyNotFound": [
+							27
+						],
+						"PolicyUnderReview": [
+							58
+						],
+						"TransferFailed": [
+							111
+						],
+						"ZeroAddress": [
+							4
+						],
+						"ZeroAmount": [
+							7
+						]
+					},
+					"id": 112,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 1,
+							"literals": [
+								"solidity",
+								"^",
+								"0.8",
+								".30"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "32:24:0"
+						},
+						{
+							"documentation": {
+								"id": 2,
+								"nodeType": "StructuredDocumentation",
+								"src": "752:87:0",
+								"text": "@notice Thrown when a zero address is passed where a non-zero address is required."
+							},
+							"errorSelector": "d92e233d",
+							"id": 4,
+							"name": "ZeroAddress",
+							"nameLocation": "845:11:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 3,
+								"nodeType": "ParameterList",
+								"parameters": [],
+								"src": "856:2:0"
+							},
+							"src": "839:20:0"
+						},
+						{
+							"documentation": {
+								"id": 5,
+								"nodeType": "StructuredDocumentation",
+								"src": "861:73:0",
+								"text": "@notice Thrown when a numeric argument is zero but must be non-zero."
+							},
+							"errorSelector": "1f2a2005",
+							"id": 7,
+							"name": "ZeroAmount",
+							"nameLocation": "940:10:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 6,
+								"nodeType": "ParameterList",
+								"parameters": [],
+								"src": "950:2:0"
+							},
+							"src": "934:19:0"
+						},
+						{
+							"documentation": {
+								"id": 8,
+								"nodeType": "StructuredDocumentation",
+								"src": "1146:136:0",
+								"text": "@notice Thrown when trying to register a wallet that is already registered.\n @param wallet The wallet address already on record."
+							},
+							"errorSelector": "6a20318f",
+							"id": 12,
+							"name": "DriverAlreadyRegistered",
+							"nameLocation": "1288:23:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 11,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 10,
+										"mutability": "mutable",
+										"name": "wallet",
+										"nameLocation": "1320:6:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 12,
+										"src": "1312:14:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 9,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "1312:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "1311:16:0"
+							},
+							"src": "1282:46:0"
+						},
+						{
+							"documentation": {
+								"id": 13,
+								"nodeType": "StructuredDocumentation",
+								"src": "1330:133:0",
+								"text": "@notice Thrown when referencing a wallet that has not registered as a driver.\n @param wallet The unrecognized wallet address."
+							},
+							"errorSelector": "dee8306d",
+							"id": 17,
+							"name": "DriverNotRegistered",
+							"nameLocation": "1469:19:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 16,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 15,
+										"mutability": "mutable",
+										"name": "wallet",
+										"nameLocation": "1497:6:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 17,
+										"src": "1489:14:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 14,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "1489:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "1488:16:0"
+							},
+							"src": "1463:42:0"
+						},
+						{
+							"documentation": {
+								"id": 18,
+								"nodeType": "StructuredDocumentation",
+								"src": "1699:163:0",
+								"text": "@notice Thrown when a driver already holds an active policy and tries to purchase another.\n @param driver The driver wallet with an existing active policy."
+							},
+							"errorSelector": "48643ca4",
+							"id": 22,
+							"name": "PolicyAlreadyActive",
+							"nameLocation": "1868:19:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 21,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 20,
+										"mutability": "mutable",
+										"name": "driver",
+										"nameLocation": "1896:6:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 22,
+										"src": "1888:14:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 19,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "1888:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "1887:16:0"
+							},
+							"src": "1862:42:0"
+						},
+						{
+							"documentation": {
+								"id": 23,
+								"nodeType": "StructuredDocumentation",
+								"src": "1906:117:0",
+								"text": "@notice Thrown when referencing a policy ID that does not exist.\n @param policyId The unrecognized policy ID."
+							},
+							"errorSelector": "43bebf4a",
+							"id": 27,
+							"name": "PolicyNotFound",
+							"nameLocation": "2029:14:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 26,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 25,
+										"mutability": "mutable",
+										"name": "policyId",
+										"nameLocation": "2052:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 27,
+										"src": "2044:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 24,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "2044:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "2043:18:0"
+							},
+							"src": "2023:39:0"
+						},
+						{
+							"documentation": {
+								"id": 28,
+								"nodeType": "StructuredDocumentation",
+								"src": "2064:137:0",
+								"text": "@notice Thrown when an action requires an active policy but the policy is not active.\n @param policyId The policy ID in question."
+							},
+							"errorSelector": "a3068e7b",
+							"id": 32,
+							"name": "PolicyNotActive",
+							"nameLocation": "2207:15:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 31,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 30,
+										"mutability": "mutable",
+										"name": "policyId",
+										"nameLocation": "2231:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 32,
+										"src": "2223:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 29,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "2223:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "2222:18:0"
+							},
+							"src": "2201:40:0"
+						},
+						{
+							"documentation": {
+								"id": 33,
+								"nodeType": "StructuredDocumentation",
+								"src": "2243:185:0",
+								"text": "@notice Thrown when an action is attempted on a policy that has expired.\n @param policyId The expired policy ID.\n @param expiryTime The timestamp at which the policy expired."
+							},
+							"errorSelector": "9e33b74c",
+							"id": 39,
+							"name": "PolicyExpired",
+							"nameLocation": "2434:13:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 38,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 35,
+										"mutability": "mutable",
+										"name": "policyId",
+										"nameLocation": "2456:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 39,
+										"src": "2448:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 34,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "2448:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 37,
+										"mutability": "mutable",
+										"name": "expiryTime",
+										"nameLocation": "2473:10:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 39,
+										"src": "2466:17:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint64",
+											"typeString": "uint64"
+										},
+										"typeName": {
+											"id": 36,
+											"name": "uint64",
+											"nodeType": "ElementaryTypeName",
+											"src": "2466:6:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint64",
+												"typeString": "uint64"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "2447:37:0"
+							},
+							"src": "2428:57:0"
+						},
+						{
+							"documentation": {
+								"id": 40,
+								"nodeType": "StructuredDocumentation",
+								"src": "2487:188:0",
+								"text": "@notice Thrown when the value sent does not match the required premium amount.\n @param required The expected premium amount in wei.\n @param sent The amount actually sent in wei."
+							},
+							"errorSelector": "07173864",
+							"id": 46,
+							"name": "IncorrectPremiumAmount",
+							"nameLocation": "2681:22:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 45,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 42,
+										"mutability": "mutable",
+										"name": "required",
+										"nameLocation": "2712:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 46,
+										"src": "2704:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 41,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "2704:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 44,
+										"mutability": "mutable",
+										"name": "sent",
+										"nameLocation": "2730:4:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 46,
+										"src": "2722:12:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 43,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "2722:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "2703:32:0"
+							},
+							"src": "2675:61:0"
+						},
+						{
+							"documentation": {
+								"id": 47,
+								"nodeType": "StructuredDocumentation",
+								"src": "2738:212:0",
+								"text": "@notice Thrown when a caller other than the policy's driver attempts a driver-only action.\n @param caller The address that attempted the action.\n @param policyId The policy ID they attempted to act on."
+							},
+							"errorSelector": "defdba4b",
+							"id": 53,
+							"name": "NotPolicyOwner",
+							"nameLocation": "2956:14:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 52,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 49,
+										"mutability": "mutable",
+										"name": "caller",
+										"nameLocation": "2979:6:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 53,
+										"src": "2971:14:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 48,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "2971:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 51,
+										"mutability": "mutable",
+										"name": "policyId",
+										"nameLocation": "2995:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 53,
+										"src": "2987:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 50,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "2987:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "2970:34:0"
+							},
+							"src": "2950:55:0"
+						},
+						{
+							"documentation": {
+								"id": 54,
+								"nodeType": "StructuredDocumentation",
+								"src": "3007:206:0",
+								"text": "@notice Thrown when a policy is flagged under review (safety score < 60) and the\n         attempted action requires the policy to be in good standing.\n @param policyId The policy ID under review."
+							},
+							"errorSelector": "22c61b38",
+							"id": 58,
+							"name": "PolicyUnderReview",
+							"nameLocation": "3219:17:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 57,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 56,
+										"mutability": "mutable",
+										"name": "policyId",
+										"nameLocation": "3245:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 58,
+										"src": "3237:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 55,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "3237:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "3236:18:0"
+							},
+							"src": "3213:42:0"
+						},
+						{
+							"documentation": {
+								"id": 59,
+								"nodeType": "StructuredDocumentation",
+								"src": "3450:138:0",
+								"text": "@notice Thrown when a submitted safety score is outside the valid 0-100 range.\n @param score The invalid score that was submitted."
+							},
+							"errorSelector": "e31aa918",
+							"id": 63,
+							"name": "InvalidSafetyScore",
+							"nameLocation": "3594:18:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 62,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 61,
+										"mutability": "mutable",
+										"name": "score",
+										"nameLocation": "3619:5:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 63,
+										"src": "3613:11:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint8",
+											"typeString": "uint8"
+										},
+										"typeName": {
+											"id": 60,
+											"name": "uint8",
+											"nodeType": "ElementaryTypeName",
+											"src": "3613:5:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint8",
+												"typeString": "uint8"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "3612:13:0"
+							},
+							"src": "3588:38:0"
+						},
+						{
+							"documentation": {
+								"id": 64,
+								"nodeType": "StructuredDocumentation",
+								"src": "3818:114:0",
+								"text": "@notice Thrown when referencing a claim ID that does not exist.\n @param claimId The unrecognized claim ID."
+							},
+							"errorSelector": "3373e461",
+							"id": 68,
+							"name": "ClaimNotFound",
+							"nameLocation": "3938:13:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 67,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 66,
+										"mutability": "mutable",
+										"name": "claimId",
+										"nameLocation": "3960:7:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 68,
+										"src": "3952:15:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 65,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "3952:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "3951:17:0"
+							},
+							"src": "3932:37:0"
+						},
+						{
+							"documentation": {
+								"id": 69,
+								"nodeType": "StructuredDocumentation",
+								"src": "3971:262:0",
+								"text": "@notice Thrown when a driver attempts to submit a new claim while a prior\n         claim on the same policy is still pending resolution.\n @param policyId The policy ID with a pending claim.\n @param pendingClaimId The claim ID that is still pending."
+							},
+							"errorSelector": "c19a4c28",
+							"id": 75,
+							"name": "ClaimAlreadyPending",
+							"nameLocation": "4239:19:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 74,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 71,
+										"mutability": "mutable",
+										"name": "policyId",
+										"nameLocation": "4267:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 75,
+										"src": "4259:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 70,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "4259:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 73,
+										"mutability": "mutable",
+										"name": "pendingClaimId",
+										"nameLocation": "4285:14:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 75,
+										"src": "4277:22:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 72,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "4277:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "4258:42:0"
+							},
+							"src": "4233:68:0"
+						},
+						{
+							"documentation": {
+								"id": 76,
+								"nodeType": "StructuredDocumentation",
+								"src": "4303:195:0",
+								"text": "@notice Thrown when attempting to verify an accident for a claim that was\n         already verified, or approve/pay a claim not yet in the required state.\n @param claimId The claim ID."
+							},
+							"errorSelector": "a9d45dfe",
+							"id": 80,
+							"name": "InvalidClaimState",
+							"nameLocation": "4504:17:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 79,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 78,
+										"mutability": "mutable",
+										"name": "claimId",
+										"nameLocation": "4530:7:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 80,
+										"src": "4522:15:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 77,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "4522:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "4521:17:0"
+							},
+							"src": "4498:41:0"
+						},
+						{
+							"documentation": {
+								"id": 81,
+								"nodeType": "StructuredDocumentation",
+								"src": "4541:166:0",
+								"text": "@notice Thrown when attempting to approve or pay out a claim whose accident\n         has not yet been verified by the oracle.\n @param claimId The claim ID."
+							},
+							"errorSelector": "d6e87d7d",
+							"id": 85,
+							"name": "AccidentNotVerified",
+							"nameLocation": "4713:19:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 84,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 83,
+										"mutability": "mutable",
+										"name": "claimId",
+										"nameLocation": "4741:7:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 85,
+										"src": "4733:15:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 82,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "4733:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "4732:17:0"
+							},
+							"src": "4707:43:0"
+						},
+						{
+							"documentation": {
+								"id": 86,
+								"nodeType": "StructuredDocumentation",
+								"src": "4752:128:0",
+								"text": "@notice Thrown when attempting to pay out a claim that has already been paid.\n @param claimId The claim ID already paid."
+							},
+							"errorSelector": "502eca7e",
+							"id": 90,
+							"name": "DuplicatePayout",
+							"nameLocation": "4886:15:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 89,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 88,
+										"mutability": "mutable",
+										"name": "claimId",
+										"nameLocation": "4910:7:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 90,
+										"src": "4902:15:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 87,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "4902:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "4901:17:0"
+							},
+							"src": "4880:39:0"
+						},
+						{
+							"documentation": {
+								"id": 91,
+								"nodeType": "StructuredDocumentation",
+								"src": "4921:196:0",
+								"text": "@notice Thrown when a claim's requested amount exceeds the policy's coverage amount.\n @param requested The requested claim amount.\n @param coverage The policy's maximum coverage amount."
+							},
+							"errorSelector": "bd2a227f",
+							"id": 97,
+							"name": "ClaimExceedsCoverage",
+							"nameLocation": "5123:20:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 96,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 93,
+										"mutability": "mutable",
+										"name": "requested",
+										"nameLocation": "5152:9:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 97,
+										"src": "5144:17:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 92,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "5144:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 95,
+										"mutability": "mutable",
+										"name": "coverage",
+										"nameLocation": "5171:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 97,
+										"src": "5163:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 94,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "5163:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "5143:37:0"
+							},
+							"src": "5117:64:0"
+						},
+						{
+							"documentation": {
+								"id": 98,
+								"nodeType": "StructuredDocumentation",
+								"src": "5373:197:0",
+								"text": "@notice Thrown when the pool's available balance is insufficient to cover a payout.\n @param requested The requested payout amount.\n @param available The pool's current available balance."
+							},
+							"errorSelector": "ce9514f9",
+							"id": 104,
+							"name": "InsufficientPoolBalance",
+							"nameLocation": "5576:23:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 103,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 100,
+										"mutability": "mutable",
+										"name": "requested",
+										"nameLocation": "5608:9:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 104,
+										"src": "5600:17:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 99,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "5600:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 102,
+										"mutability": "mutable",
+										"name": "available",
+										"nameLocation": "5627:9:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 104,
+										"src": "5619:17:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 101,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "5619:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "5599:38:0"
+							},
+							"src": "5570:68:0"
+						},
+						{
+							"documentation": {
+								"id": 105,
+								"nodeType": "StructuredDocumentation",
+								"src": "5640:153:0",
+								"text": "@notice Thrown when a native-token transfer (ETH) fails.\n @param to The intended recipient.\n @param amount The amount that failed to transfer."
+							},
+							"errorSelector": "1c43b976",
+							"id": 111,
+							"name": "TransferFailed",
+							"nameLocation": "5799:14:0",
+							"nodeType": "ErrorDefinition",
+							"parameters": {
+								"id": 110,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 107,
+										"mutability": "mutable",
+										"name": "to",
+										"nameLocation": "5822:2:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 111,
+										"src": "5814:10:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 106,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "5814:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 109,
+										"mutability": "mutable",
+										"name": "amount",
+										"nameLocation": "5834:6:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 111,
+										"src": "5826:14:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 108,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "5826:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "5813:28:0"
+							},
+							"src": "5793:49:0"
+						}
+					],
+					"src": "32:5811:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}
